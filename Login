@@ -30,28 +30,34 @@ namespace Login_QL_cửa_hàng_điện_thoại
         {
             try
             {
-                private static void CreateCommand(string queryString,string connectionString)
+                string Sql = "Select Count(*) [QLCUAHANGDT].[dbo].[Account] Where username = @acc and pass = @pass";
+                conn = new SqlConnection(strConnection);
+                conn.Open();
+                command = new SqlCommand(Sql, conn);
+                command.Parameters.Add(new SqlParameter("@username", txtusername.Text));
+                command.Parameters.Add(new SqlParameter("@password", txtpassword.Text));
+                int x = (int)command.ExecuteScalar();
+                if (x == 1)
                 {
-                    using (SqlConnection connection = new SqlConnection(
-                               connectionString))
-                    {
-                        connection.Open();
-                        string Sql = "Select Count(*) [QLCUAHANGDT].[dbo].[Account] Where username = @acc and pass = @pass";
-                        SqlCommand command = new SqlCommand(queryString, connection);
-                        SqlDataReader reader = command.ExecuteReader();
-                        while (reader.Read())
-                        {
-                            Console.WriteLine(String.Format("{0}", reader[0]));
-                        }
-                    }
+                    MessageBox.Show("Login Succeed", "Nofitication");
+
                 }
-               
+                else
+                {
+                    lblIncorrect.Text = "Username Or Password Is Not Correct";
+                    txtusername.Text = "";
+                    txtpassword.Text = "";
+                    txtusername.Focus();
+
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
+    }
+}
 
         private void cbforgetpassword_CheckedChanged(object sender, EventArgs e)
         {
