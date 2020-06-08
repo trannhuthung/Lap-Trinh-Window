@@ -9,45 +9,48 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 
-namespace Login_QL_cửa_hàng_điện_thoại
+namespace Login_QLCHDT
 {
-    public partial class FormLogin : Form
+    public partial class FrmLogin : Form
     {
+        StudentManagement st;
         string strConnection = @"Data Source=DESKTOP-8BDMBKN;Initial Catalog=QLCUAHANGDT;Integrated Security=True";
         SqlConnection conn;
         SqlCommand command;
-        public FormLogin()
+        public FrmLogin()
         {
             InitializeComponent();
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
 
         }
 
-        private void btlogin_Click(object sender, EventArgs e)
+        private void btnLogin_Click(object sender, EventArgs e)
         {
             try
             {
-                string Sql = "Select Count(*) [QLCUAHANGDT].[dbo].[Account] Where username = @acc and pass = @pass";
+                string sql = "Select Count(*) [QLCUAHANGDT].[dbo].[Login] Where Username = @acc and Password = @pass";
                 conn = new SqlConnection(strConnection);
                 conn.Open();
-                command = new SqlCommand(Sql, conn);
-                command.Parameters.Add(new SqlParameter("@username", txtusername.Text));
-                command.Parameters.Add(new SqlParameter("@password", txtpassword.Text));
+                command = new SqlCommand(sql, conn);
+                command.Parameters.Add(new SqlParameter("@acc", txtUsername.Text));
+                command.Parameters.Add(new SqlParameter("@pass", txtPassword.Text));
                 int x = (int)command.ExecuteScalar();
                 if (x == 1)
                 {
-                    MessageBox.Show("Login Succeed", "Nofitication");
+                    this.Hide();
+                    st = new StudentManagement();
+                    st.Show();
 
                 }
                 else
                 {
                     lblIncorrect.Text = "Username Or Password Is Not Correct";
-                    txtusername.Text = "";
-                    txtpassword.Text = "";
-                    txtusername.Focus();
+                    txtUsername.Text = "";
+                    txtPassword.Text = "";
+                    txtUsername.Focus();
 
                 }
             }
@@ -56,21 +59,17 @@ namespace Login_QL_cửa_hàng_điện_thoại
                 MessageBox.Show(ex.Message);
             }
         }
-    }
-}
 
-        private void cbforgetpassword_CheckedChanged(object sender, EventArgs e)
+        private void chbShowPassword_CheckedChanged(object sender, EventArgs e)
         {
-            if(cbforgetpassword.Checked)
+            if(chbShowPassword.Checked)
             {
-                txtpassword.UseSystemPasswordChar = false;
-
+                txtPassword.UseSystemPasswordChar = false;
             }
             else
             {
-                txtpassword.UseSystemPasswordChar = true;
+                txtPassword.UseSystemPasswordChar = true;
             }
         }
-        
     }
 }
