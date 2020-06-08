@@ -1,0 +1,70 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Data.SqlClient;
+
+namespace Login_QL_cửa_hàng_điện_thoại
+{
+    public partial class FormLogin : Form
+    {
+        string strConnection = @"Data Source=DESKTOP-8BDMBKN;Initial Catalog=QLCUAHANGDT;Integrated Security=True";
+        SqlConnection conn;
+        SqlCommand command;
+        public FormLogin()
+        {
+            InitializeComponent();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btlogin_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                private static void CreateCommand(string queryString,string connectionString)
+                {
+                    using (SqlConnection connection = new SqlConnection(
+                               connectionString))
+                    {
+                        connection.Open();
+                        string Sql = "Select Count(*) [QLCUAHANGDT].[dbo].[Account] Where username = @acc and pass = @pass";
+                        SqlCommand command = new SqlCommand(queryString, connection);
+                        SqlDataReader reader = command.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            Console.WriteLine(String.Format("{0}", reader[0]));
+                        }
+                    }
+                }
+               
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void cbforgetpassword_CheckedChanged(object sender, EventArgs e)
+        {
+            if(cbforgetpassword.Checked)
+            {
+                txtpassword.UseSystemPasswordChar = false;
+
+            }
+            else
+            {
+                txtpassword.UseSystemPasswordChar = true;
+            }
+        }
+        
+    }
+}
